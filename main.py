@@ -8,22 +8,34 @@ def read_xml(file):
 	return sql
 
 def get_nullable(node):
-	nullable = node.attrib['nullable']
-	if nullable == 'false':
-		return ' NOT NULL'
-	return ''
+	try:
+		nullable = node.attrib['nullable']
+	except KeyError:
+		return ''
+	else:
+		if nullable == 'false':
+			return ' NOT NULL'
+		elif nullable == 'true':
+			return ''
 
 def get_unsigned(node):
-	unsigned = node.attrib['unsigned']
-	if unsigned == 'true':
-		return ' UNSIGNED'
-	return ''
+	try:
+		unsigned = node.attrib['unsigned']
+	except KeyError:
+		return ''
+	else:
+		if unsigned == 'true':
+			return ' UNSIGNED'
+		elif unsigned == 'false':
+			return ''
 
 def get_comment(node):
-	comment = node.attrib['comment']
-	if comment:
+	try:
+		comment = node.attrib['comment']
+	except KeyError:
+		return ''
+	else:
 		return " COMMENT '" + comment + "'"
-	return ''
 
 def get_length(node):
 	length = node.attrib['length']
