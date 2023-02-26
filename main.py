@@ -63,6 +63,10 @@ def get_type(node):
 		return 'INT' + get_unsigned(node) + get_default_numeric(node)
 	elif data_type == 'varchar':
 		return 'VARCHAR' + get_length(node) + get_default_string(node)
+	elif data_type == 'text':
+		return 'TEXT'
+	elif data_type == 'blob':
+		return 'BLOB'
 
 def create_column(node):
 	name = node.attrib['name']

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <table name="catalog_product_entity_datetime" resource="default" engine="innodb"
            comment="Catalog Product Datetime Attribute Backend Table">
-    <column type="int" name="value_id" unsigned="false" identity="true" comment="Value ID"/>
-    <column type="varchar" name="varchar_test" default="teste" length="15"/>
+    <column type="int" name="value_id" unsigned="false" nullable="false" identity="true" comment="Value ID"/>
+    <column type="text" name="text_test" nullable="true" comment="Text test"/>
 </table>
