@@ -7,10 +7,22 @@ def read_xml(file):
 	sql = create_table(root)
 	return sql
 
+def get_nullable(node):
+	nullable = node.attrib['nullable']
+	if nullable == 'true':
+		return ' NOT NULL'
+	return ''
+
+def get_unsigned(node):
+	unsigned = node.attrib['unsigned']
+	if unsigned == 'true':
+		return ' UNSIGNED'
+	return ''
+
 def get_type(node):
 	data_type = node.attrib['type']
 	if data_type == 'int':
-		return 'int'
+		return 'INT' + get_unsigned(node) + get_nullable(node)
 
 def create_column(node):
 	name = node.attrib['name']
