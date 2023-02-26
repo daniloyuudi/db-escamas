@@ -57,6 +57,16 @@ def get_default_string(node):
 	else:
 		return " DEFAULT '" + default + "'"
 
+def get_default_datetime(node):
+	try:
+		default = node.attrib['default']
+	except KeyError:
+		return ''
+	else:
+		if default == 'CURRENT_TIMESTAMP':
+			return " DEFAULT CURRENT_TIMESTAMP"
+		return ''
+
 def get_precision(node):
 	try:
 		precision = node.attrib['precision']
@@ -82,6 +92,12 @@ def get_type(node):
 		return 'TEXT'
 	elif data_type == 'blob':
 		return 'BLOB'
+	elif data_type == 'date':
+		return 'DATE'
+	elif data_type == 'datetime':
+		return 'DATETIME' + get_default_datetime(node)
+	elif data_type == 'timestamp':
+		return 'TIMESTAMP' + get_default_datetime(node)
 
 def create_column(node):
 	name = node.attrib['name']
