@@ -57,10 +57,17 @@ def get_default_string(node):
 	else:
 		return " DEFAULT '" + default + "'"
 
+def get_precision(node):
+	precision = node.attrib['precision']
+	scale = node.attrib['scale']
+	return '(' + ','.join([precision, scale]) + ')'
+
 def get_type(node):
 	data_type = node.attrib['type']
 	if data_type == 'int':
 		return 'INT' + get_unsigned(node) + get_default_numeric(node)
+	elif data_type == 'float':
+		return 'FLOAT' + get_default_numeric(node)
 	elif data_type == 'varchar':
 		return 'VARCHAR' + get_length(node) + get_default_string(node)
 	elif data_type == 'text':
