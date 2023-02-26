@@ -2,5 +2,5 @@
 <table name="catalog_product_entity_datetime" resource="default" engine="innodb"
            comment="Catalog Product Datetime Attribute Backend Table">
     <column type="int" name="value_id" unsigned="false" nullable="false" identity="true" comment="Value ID"/>
-    <column type="float" name="float_test" default="5" nullable="true" precision="5" scale="2" comment="Float test"/>
+    <column type="decimal" name="decimal_test" nullable="true" comment="Decimal test"/>
 </table>

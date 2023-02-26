@@ -58,9 +58,13 @@ def get_default_string(node):
 		return " DEFAULT '" + default + "'"
 
 def get_precision(node):
-	precision = node.attrib['precision']
-	scale = node.attrib['scale']
-	return '(' + ','.join([precision, scale]) + ')'
+	try:
+		precision = node.attrib['precision']
+		scale = node.attrib['scale']
+	except KeyError:
+		return ''
+	else:
+		return '(' + ','.join([precision, scale]) + ')'
 
 def get_type(node):
 	data_type = node.attrib['type']
@@ -68,6 +72,10 @@ def get_type(node):
 		return 'INT' + get_unsigned(node) + get_default_numeric(node)
 	elif data_type == 'float':
 		return 'FLOAT' + get_default_numeric(node)
+	elif data_type == 'real':
+		return 'REAL' + get_default_numeric(node)
+	elif data_type == 'decimal':
+		return 'DECIMAL' + get_precision(node) + get_default_numeric(node)
 	elif data_type == 'varchar':
 		return 'VARCHAR' + get_length(node) + get_default_string(node)
 	elif data_type == 'text':
