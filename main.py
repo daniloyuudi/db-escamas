@@ -19,15 +19,21 @@ def get_unsigned(node):
 		return ' UNSIGNED'
 	return ''
 
+def get_comment(node):
+	comment = node.attrib['comment']
+	if comment:
+		return " COMMENT '" + comment + "'"
+	return ''
+
 def get_type(node):
 	data_type = node.attrib['type']
 	if data_type == 'int':
-		return 'INT' + get_unsigned(node) + get_nullable(node)
+		return 'INT' + get_unsigned(node)
 
 def create_column(node):
 	name = node.attrib['name']
 	data_type = node.attrib['type']
-	sql = name + ' ' + get_type(node)
+	sql = name + ' ' + get_type(node) + get_nullable(node) + get_comment(node)
 	return sql
 
 def get_columns(node):
