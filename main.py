@@ -9,7 +9,7 @@ def read_xml(file):
 
 def get_nullable(node):
 	nullable = node.attrib['nullable']
-	if nullable == 'true':
+	if nullable == 'false':
 		return ' NOT NULL'
 	return ''
 
