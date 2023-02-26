@@ -25,10 +25,16 @@ def get_comment(node):
 		return " COMMENT '" + comment + "'"
 	return ''
 
+def get_length(node):
+	length = node.attrib['length']
+	return '(' + length + ')'
+
 def get_type(node):
 	data_type = node.attrib['type']
 	if data_type == 'int':
 		return 'INT' + get_unsigned(node)
+	elif data_type == 'varchar':
+		return 'VARCHAR' + get_length(node)
 
 def create_column(node):
 	name = node.attrib['name']
@@ -42,7 +48,7 @@ def get_columns(node):
 		if child.tag == 'column':
 			column = create_column(child)
 			columns.append(column)
-	return ','.join(columns)
+	return ', '.join(columns)
 
 def save_to_file(sql, file):
 	f = open(file, 'w')
