@@ -3,8 +3,5 @@
            comment="Catalog Product Datetime Attribute Backend Table">
     <column type="int" name="value_id" unsigned="false" nullable="false" identity="true" comment="Value ID"/>
     <column type="timestamp" name="timestamp_test" nullable="true" default="CURRENT_TIMESTAMP" comment="Timestamp test"/>
-    <constraint type="unique" referenceId="CATALOG_PRODUCT_ENTITY_DATETIME_ENTITY_ID_ATTRIBUTE_ID_STORE_ID">
-        <column name="value_id"/>
-        <column name="timestamp_test"/>
-    </constraint>
+    <constraint type="foreign" referenceId="CAT_PRD_ENTT_DTIME_ATTR_ID_EAV_ATTR_ATTR_ID" table="catalog_product_entity_datetime" column="value_id" referenceTable="eav_attribute" referenceColumn="attribute_id" onDelete="CASCADE"/>
 </table>

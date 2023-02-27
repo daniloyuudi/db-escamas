@@ -144,6 +144,12 @@ def create_constraint(node):
 	if data_type == 'primary':
 		columns = get_primary_key_columns(node)
 		return 'PRIMARY KEY (' + columns + ')'
+	elif data_type == 'foreign':
+		name = node.attrib['referenceId']
+		column = node.attrib['column']
+		reference_table = node.attrib['referenceTable']
+		reference_column = node.attrib['referenceColumn']
+		return 'CONSTRAINT ' + name + ' FOREIGN KEY (' + column + ') REFERENCES ' + reference_table + '(' + reference_column + ')'
 	elif data_type == 'unique':
 		columns = get_unique_columns(node)
 		name = node.attrib['referenceId']
