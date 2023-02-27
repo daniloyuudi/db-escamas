@@ -131,11 +131,23 @@ def get_primary_key_columns(node):
 			columns.append(name)
 	return ','.join(columns)
 
+def get_unique_columns(node):
+	columns = []
+	for child in node:
+		if child.tag == 'column':
+			name = child.attrib['name']
+			columns.append(name)
+	return ','.join(columns)
+
 def create_constraint(node):
 	data_type = node.attrib['type']
 	if data_type == 'primary':
 		columns = get_primary_key_columns(node)
 		return 'PRIMARY KEY (' + columns + ')'
+	elif data_type == 'unique':
+		columns = get_unique_columns(node)
+		name = node.attrib['referenceId']
+		return 'CONSTRAINT ' + name + ' UNIQUE (' + columns + ')'
 
 def get_constraints(node):
 	constraints = []
