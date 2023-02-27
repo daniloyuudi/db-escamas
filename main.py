@@ -111,7 +111,7 @@ def get_columns(node):
 		if child.tag == 'column':
 			column = create_column(child)
 			columns.append(column)
-	return ', '.join(columns)
+	return '(' + ', '.join(columns) + ')'
 
 def save_to_file(sql, file):
 	f = open(file, 'w')
@@ -121,12 +121,7 @@ def save_to_file(sql, file):
 def create_table(node):
 	attributes = node.attrib
 	name = attributes['name']
-	comment = attributes['comment']
-	columns = get_columns(node)
-	if not comment:
-		sql = 'CREATE TABLE ' + name + ' (' + columns + ');'
-	else:
-		sql = "CREATE TABLE " + name + " (" + columns + ") COMMENT='" + comment + "';"
+	sql = 'CREATE TABLE ' + name + get_columns(node) + get_comment(node) + ';'
 	return sql
 
 sql = read_xml(sys.argv[1])
