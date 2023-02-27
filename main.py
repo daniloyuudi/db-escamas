@@ -76,10 +76,20 @@ def get_precision(node):
 	else:
 		return '(' + ','.join([precision, scale]) + ')'
 
+def get_auto_increment(node):
+	try:
+		identity = node.attrib['identity']
+	except KeyError:
+		return ''
+	else:
+		if identity == 'true':
+			return ' AUTO_INCREMENT'
+		return ''
+
 def get_type(node):
 	data_type = node.attrib['type']
 	if data_type == 'int':
-		return 'INT' + get_unsigned(node) + get_default_numeric(node)
+		return 'INT' + get_unsigned(node) + get_auto_increment(node) + get_default_numeric(node)
 	elif data_type == 'float':
 		return 'FLOAT' + get_default_numeric(node)
 	elif data_type == 'real':
