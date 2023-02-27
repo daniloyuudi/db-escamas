@@ -4,7 +4,7 @@ import xml.etree.ElementTree as ET
 def read_xml(file):
 	tree = ET.parse(file)
 	root = tree.getroot()
-	sql = create_table(root)
+	sql = create_table(root) + '\n' + create_indexes(root)
 	return sql
 
 def get_nullable(node):
@@ -174,6 +174,28 @@ def create_table(node):
 	name = attributes['name']
 	sql = 'CREATE TABLE ' + name + '(' + get_columns(node) + ', ' + get_constraints(node) + ')' + get_comment(node) + ';'
 	return sql
+
+def get_index_columns(node):
+	columns = []
+	for child in node:
+		if child.tag == 'column':
+			column = child.attrib['name']
+			columns.append(column)
+	return ','.join(columns)
+
+def create_index(node, table_name):
+	name = node.attrib['referenceId']
+	columns = get_index_columns(node)
+	return 'CREATE INDEX ' + name + ' ON ' + table_name + ' (' + columns + ');'
+
+def create_indexes(node):
+	indexes = []
+	name = node.attrib['name']
+	for child in node:
+		if child.tag == 'index':
+			index = create_index(child, name)
+			indexes.append(index)
+	return '\n'.join(indexes)
 
 sql = read_xml(sys.argv[1])
 save_to_file(sql, sys.argv[2])
