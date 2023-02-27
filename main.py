@@ -111,7 +111,26 @@ def get_columns(node):
 		if child.tag == 'column':
 			column = create_column(child)
 			columns.append(column)
-	return '(' + ', '.join(columns) + ')'
+	return ', '.join(columns)
+
+def get_primary_key_column_name(node):
+	child = node[0]
+	if child.tag == 'column':
+		return child.attrib['name']
+
+def create_constraint(node):
+	data_type = node.attrib['type']
+	if data_type == 'primary':
+		column = get_primary_key_column_name(node)
+		return 'PRIMARY KEY (' + column + ')'
+
+def get_constraints(node):
+	constraints = []
+	for child in node:
+		if child.tag == 'constraint':
+			constraint = create_constraint(child)
+			constraints.append(constraint)
+	return ', '.join(constraints)
 
 def save_to_file(sql, file):
 	f = open(file, 'w')
@@ -121,7 +140,7 @@ def save_to_file(sql, file):
 def create_table(node):
 	attributes = node.attrib
 	name = attributes['name']
-	sql = 'CREATE TABLE ' + name + get_columns(node) + get_comment(node) + ';'
+	sql = 'CREATE TABLE ' + name + '(' + get_columns(node) + ', ' + get_constraints(node) + ')' + get_comment(node) + ';'
 	return sql
 
 sql = read_xml(sys.argv[1])
