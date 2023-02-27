@@ -149,7 +149,8 @@ def create_constraint(node):
 		column = node.attrib['column']
 		reference_table = node.attrib['referenceTable']
 		reference_column = node.attrib['referenceColumn']
-		return 'CONSTRAINT ' + name + ' FOREIGN KEY (' + column + ') REFERENCES ' + reference_table + '(' + reference_column + ')'
+		on_delete = node.attrib['onDelete']
+		return 'CONSTRAINT ' + name + ' FOREIGN KEY (' + column + ') REFERENCES ' + reference_table + '(' + reference_column + ') ON DELETE ' + on_delete
 	elif data_type == 'unique':
 		columns = get_unique_columns(node)
 		name = node.attrib['referenceId']
