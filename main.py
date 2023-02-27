@@ -123,16 +123,19 @@ def get_columns(node):
 			columns.append(column)
 	return ', '.join(columns)
 
-def get_primary_key_column_name(node):
-	child = node[0]
-	if child.tag == 'column':
-		return child.attrib['name']
+def get_primary_key_columns(node):
+	columns = []
+	for child in node:
+		if child.tag == 'column':
+			name = child.attrib['name']
+			columns.append(name)
+	return ','.join(columns)
 
 def create_constraint(node):
 	data_type = node.attrib['type']
 	if data_type == 'primary':
-		column = get_primary_key_column_name(node)
-		return 'PRIMARY KEY (' + column + ')'
+		columns = get_primary_key_columns(node)
+		return 'PRIMARY KEY (' + columns + ')'
 
 def get_constraints(node):
 	constraints = []
