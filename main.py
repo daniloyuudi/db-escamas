@@ -4,7 +4,7 @@ import xml.etree.ElementTree as ET
 def read_xml(file):
 	tree = ET.parse(file)
 	root = tree.getroot()
-	sql = create_table(root) + '\n' + create_indexes(root)
+	sql = create_table(root)
 	return sql
 
 def get_nullable(node):
@@ -121,7 +121,7 @@ def get_columns(node):
 		if child.tag == 'column':
 			column = create_column(child)
 			columns.append(column)
-	return ', '.join(columns)
+	return ',\n'.join(columns)
 
 def get_primary_key_columns(node):
 	columns = []
@@ -162,18 +162,12 @@ def get_constraints(node):
 		if child.tag == 'constraint':
 			constraint = create_constraint(child)
 			constraints.append(constraint)
-	return ', '.join(constraints)
+	return ',\n'.join(constraints)
 
 def save_to_file(sql, file):
 	f = open(file, 'w')
 	f.write(sql)
 	f.close()
-
-def create_table(node):
-	attributes = node.attrib
-	name = attributes['name']
-	sql = 'CREATE TABLE ' + name + '(' + get_columns(node) + ', ' + get_constraints(node) + ')' + get_comment(node) + ';'
-	return sql
 
 def get_index_columns(node):
 	columns = []
@@ -183,19 +177,24 @@ def get_index_columns(node):
 			columns.append(column)
 	return ','.join(columns)
 
-def create_index(node, table_name):
+def create_index(node):
 	name = node.attrib['referenceId']
 	columns = get_index_columns(node)
-	return 'CREATE INDEX ' + name + ' ON ' + table_name + ' (' + columns + ');'
+	return 'INDEX (' + columns + ')'
 
-def create_indexes(node):
+def get_indexes(node):
 	indexes = []
-	name = node.attrib['name']
 	for child in node:
 		if child.tag == 'index':
-			index = create_index(child, name)
+			index = create_index(child)
 			indexes.append(index)
-	return '\n'.join(indexes)
+	return ',\n'.join(indexes)
+
+def create_table(node):
+	attributes = node.attrib
+	name = attributes['name']
+	sql = 'CREATE TABLE ' + name + '(\n' + get_columns(node) + ',\n' + get_constraints(node) + ',\n' + get_indexes(node) + ')\n' + get_comment(node) + ';'
+	return sql
 
 sql = read_xml(sys.argv[1])
 save_to_file(sql, sys.argv[2])
